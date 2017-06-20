@@ -40,7 +40,7 @@ I discarded RGB color space as it was unstable and had a low accuracy during tra
 and extracted a combination features from HOG features of all channels, color histograms and spatial binning. 
 The final selected HOG feature parameters are `9 orientations`, `8 pixels per cell` and `2 cells per block`, 
 color histograms being `16 bins` and spatial binning size being `16 by 16`.
-which was given in lines 125 through 138 of the file called `classifier.py`.
+The selected parameters were given in lines 125 through 138 of the file called `classifier.py`.
 
 * Histograms of image channels. An example of Histogram of channels in RGB color space, 32 bins and each bin contains number of pixels falling in the range.
 
@@ -50,7 +50,7 @@ which was given in lines 125 through 138 of the file called `classifier.py`.
 
 ![RGB spatial binning](output_images/spatial_binning.png)
 
-* An example of image HOG features in `YCrCb` color space.
+* An example of image HOG features of Y' channel in `YCrCb` color space.
 
 ![Hog visualization](output_images/hog_visualization.png)
 
@@ -59,13 +59,13 @@ which was given in lines 125 through 138 of the file called `classifier.py`.
 
 I trained a Linear SVM using the labeled data from GTI vehicle image database and KITTI vision benchmark suite, but not Udacity data. Data is as follows:
 * 8792 car and 8968 non-car samples, which gives a good balanced data.
-* `14208` training data and `3552(20%)` validation data. 
+* `14208` training data and `3552(about 20%)` validation data. 
 
-I normalized the data with [StandardScaler](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) 
+I shuffled the data with `a rand_state to sklearn.model_selection.train_test_split` and normalized the data with [StandardScaler](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) 
 to avoid some features having dominant impact on classification.
 I experimented with SVC types and parameters and ended up with [a Linear SVM](http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html), 
 as it gave me a good test accuracy of 99.07% with 1000 iterations and low false positives(when with HOG features from all channels in `YCrCb` color space).
-The implementation of classifier is in the function `train_classifier` from lines 74 through 102 of the file called `classifier.py`
+The implementation of classifier is in the function `train_classifier` from lines 74 through 102 in the file called `classifier.py`
 
 ### Sliding Window Search
 
@@ -73,8 +73,8 @@ The implementation of classifier is in the function `train_classifier` from line
 
 I decided to use HOG sub-sampling search approach, as it only extracted HOG features once per image and had a better performace.
 First, I decided only to search `y range from 400 to 656`, to exclude the tree and sky areas.
-Based on the training sample image size `64 by 64`, I was experimenting with different scale in search for vehicles.
-The scale and y range were chosen based on experiments and processing speed consideration and the final selection was as follows:
+Based on the training sample image size `64 by 64`, I was experimenting with different scales in search for vehicles.
+The scales and y ranges were chosen based on experiments plus processing speed considerations and the final selections were as follows:
 
 | Search size | Scale | Y start and stop | 
 |:-----------:|:-----:| :---------------:| 
@@ -105,21 +105,21 @@ Finally, I drew the labeled boxes on top of original image. The heatmap and thre
 
 To further improve the detection confidence and stability, I stored 5 recent detections. 
 I combined the 5 recent detections and thresholding on them to get more smooth and reliable detections. 
-The implementation function `detect` is in the file `project.py` from line `18 to 43`.
+The implementation function `detect` is in the file `project.py` from line `19 to 51`.
 
 ---
 
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video_processed.mp4)
+Here's a [link to my video result](project_video_processed.mp4)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  I stored 5 recent positive detections.
 From the 5 recent combined positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  
-I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  
+I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. 
 I constructed bounding boxes to cover the area of each blob detected.  
 
 The implementation for heatmap and thresholding is located in the file of `heat_map.py` and 
@@ -145,9 +145,9 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 I used YCrCb 3-channel HOG features plus spatially binned color and histograms of color for feature extraction. And a Linear SVM was chosen as the classifier. 
 If I have more time, I will look into the following areas.
 

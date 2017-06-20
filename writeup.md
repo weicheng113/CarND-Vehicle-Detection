@@ -20,11 +20,11 @@ The goals / steps of this project are the following:
 
 The code for this step is contained in lines 11 through 34 of the file called `hog_features.py`).  
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+I started by reading in all the `vehicle` and `non-vehicle` images. Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 ![Car notcar example](output_images/car_notcar.png)
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  
+I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`). 
 I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
 Here is an example using the `YCrCb` color space Y' channel and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
@@ -59,7 +59,7 @@ The selected parameters were given in lines 125 through 138 of the file called `
 
 I trained a Linear SVM using the labeled data from GTI vehicle image database and KITTI vision benchmark suite, but not Udacity data. Data is as follows:
 * 8792 car and 8968 non-car samples, which gives a good balanced data.
-* `14208` training data and `3552(about 20%)` validation data. 
+* `14208` training data and `3552(about 20%)` test data. 
 
 I shuffled the data with `a rand_state to sklearn.model_selection.train_test_split` and normalized the data with [StandardScaler](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) 
 to avoid some features having dominant impact on classification.
@@ -122,8 +122,8 @@ From the 5 recent combined positive detections I created a heatmap and then thre
 I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. 
 I constructed bounding boxes to cover the area of each blob detected.  
 
-The implementation for heatmap and thresholding is located in the file of `heat_map.py` and 
-the code for integration of 5 recent positive detections is in the function `detect` from line 19 to 51 in the file `project.py`.
+The implementation for heatmap and thresholding is located through `line 8 to 48` in the file of `heat_map.py` and 
+the code for integration of 5 recent positive detections is in the function `detect` from `line 19 to 51` in the file `project.py`.
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
@@ -154,5 +154,5 @@ If I have more time, I will look into the following areas.
 * Detection fails with noises, e.g., the cars in the opposite direction on the other side of guardrail. Detection also fails when car is far away.
 * I would like to experiment some more color space and features extractions to find a more stable detection.
 * I would like to look into some alternatives to sliding window searching apporach, as it does not look efficient.
-* I would like to try Deep Learning CNN approach for clafication.
+* I would like to try Deep Learning CNN approach for classification.
 

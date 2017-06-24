@@ -27,6 +27,13 @@ def read_image(filename):
     else:
         raise Exception("unknown image type of file '", filename, "'")
 
+def read_images(filenames):
+    images = []
+    for filename in filenames:
+        image = read_image(filename)
+        images.append(image)
+    return images
+
 # Define a function to return some characteristics of the dataset
 def data_look(car_list, notcar_list):
     data_dict = {}

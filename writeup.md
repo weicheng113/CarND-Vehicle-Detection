@@ -156,3 +156,55 @@ If I have more time, I will look into the following areas.
 * I would like to look into some alternatives to sliding window searching apporach, as it does not look efficient.
 * I would like to try Deep Learning CNN approach for classification.
 
+---
+### Deep Learning Approach
+
+#### 1. Model
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+lambda_1 (Lambda)            (None, 64, 64, 3)         0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 30, 30, 16)        1216      
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 30, 30, 16)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 13, 13, 32)        12832     
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 13, 13, 32)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 5, 5, 64)          51264     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 5, 5, 64)          0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 1, 1, 128)         204928    
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 1, 1, 128)         0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 1, 1, 1)           129       
+=================================================================
+Total params: 270,369
+Trainable params: 270,369
+Non-trainable params: 0
+_________________________________________________________________
+```
+
+The deep model was learnt from [Max Ritter](https://github.com/maxritter/SDC-Vehicle-Lane-Detection). I simplified the model in the following areas:
+* Replaced Pooling with convolutional strides.
+* Reduced number of filters, as I believed I didn't need so many for such a simple classification.
+* Replaced the final activation function tanh with sigmoid, as sigmoid range is (0, 1), which is more correct, whereas tanh is [-1, 1].
+
+The deep learning approach was quite simple from source code point of view. 
+There were only two file `dl.py` and `project_dl.py` and together the total number line of code were about 150(I did not implement scaled search in deep learning approach).
+The video processing speed was much much faster - only took a couple of minutes to process.
+
+#### 2. Discussion
+With comparison, I believed the deep learning approach was better. one of the key reason was that we totally let machine learnt the pattern for classification with deep learning approach.
+Whereas, with the former approach, We extracted HOG, color histograms, image binning features. 
+In the process, we might introduce some biases into the input features, as we believed these features were more relevant to the classification.
+
+#### 3. Video
+Here's a [link to my video result of deep learning approach](project_video_processed_dl.mp4)
+
+
